@@ -3,6 +3,14 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-}
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.thecatapi.com',
+      },
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
