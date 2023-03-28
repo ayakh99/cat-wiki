@@ -27,6 +27,9 @@ export default async function getTopSearches() {
       {
         name: "pagePath",
       },
+      {
+        name: "pageTitle",
+      },
     ],
     dimensionFilter: {
       filter: {
@@ -52,9 +55,20 @@ export default async function getTopSearches() {
     ],
   });
 
-  const topSearches = response.rows.map((row) => {
-    return row.dimensionValues[0].value.split("/")[2];
-  });
+  const topSearches = response.rows.reduce((acc, row) => {
+    const title = row.dimensionValues[1].value;
+    if (
+      title.includes("not set") ||
+      title.includes("Not found") ||
+      title.includes("undefined")
+    )
+      return acc;
 
-  return topSearches;
+    acc.push(row.dimensionValues[0].value.split("/")[2]);
+    return acc;
+  }, []);
+
+  const uniqueIds = [...new Set(topSearches)];
+
+  return Array.from(uniqueIds);
 }
